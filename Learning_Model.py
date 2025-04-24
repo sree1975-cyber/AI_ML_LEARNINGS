@@ -1,6 +1,6 @@
 import streamlit as st
 import importlib
-import inspect
+
 
 # Models dictionary for dynamic import
 models = {
@@ -47,7 +47,9 @@ if model:
     st.write("""
         This section explains the selected model in detail, shows a Python code example, and provides additional resources for learning.
     """)
-
+    # Call the `display_info()` function from the respective model
+    model.display_info()  
+    
     # Display Model Explanation, Code, and Helpful Links
     model.display_info()
 
