@@ -8,6 +8,9 @@ import numpy as np
 #from utils import generate_dataset, plot_regression_line
 from models.linear_regression.utils import generate_dataset, plot_decision_boundary
 
+X, y = generate_dataset()
+print("Dataset generated successfully!")
+
 def display_info():
     with st.expander("5.1 Overview of Linear Regression"):
         st.write("""
