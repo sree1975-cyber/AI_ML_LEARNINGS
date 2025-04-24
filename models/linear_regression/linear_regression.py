@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 #from utils import generate_dataset, plot_regression_line
 from models.linear_regression.utils import generate_dataset, plot_regression_line
+import plotly.graph_objects as go
 
 X, y = generate_dataset()
 print("Dataset generated successfully!")
