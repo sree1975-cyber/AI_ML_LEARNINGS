@@ -1,51 +1,41 @@
 import streamlit as st
-import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-import pandas as pd
+import importlib
 
-# Title of the app
-st.title('Machine Learning Models with Real-Time Examples')
+# Models dictionary for dynamic import
+models = {
+    "K-Nearest Neighbors (KNN)": "models.knn",
+    "Naive Bayes": "models.naive_bayes",
+    "Support Vector Machine (SVM)": "models.svm",
+    "Decision Tree": "models.decision_tree",
+    "Random Forest": "models.random_forest",
+    "Logistic Regression": "models.logistic_regression",
+    "Linear Regression": "models.linear_regression",
+    "XGBoost": "models.xgboost",
+    "K-Means Clustering": "models.kmeans",
+    "Principal Component Analysis (PCA)": "models.pca"
+}
 
-# Sidebar for navigation
-model_option = st.sidebar.selectbox('Select ML Model', ('Linear Regression', 'Random Forest', 'SVM', 'KNN'))
+# Streamlit Sidebar for Model Selection
+st.sidebar.title("Machine Learning Models")
+selected_model = st.sidebar.selectbox("Select a Model", list(models.keys()))
 
-# Data: Example dataset
-data = pd.DataFrame({
-    'Square Footage': [1400, 1600, 1700, 1875, 1100],
-    'Bedrooms': [3, 3, 3, 4, 2],
-    'Price': [245000, 312000, 279000, 308000, 199000]
-})
+# Function to dynamically load the selected model
+def load_model(model_name):
+    try:
+        model = importlib.import_module(models[model_name])
+        return model
+    except Exception as e:
+        st.error(f"Error loading model {model_name}: {e}")
 
-# Display the dataset
-st.write("Dataset Example:")
-st.write(data)
+# Display model information based on user selection
+model = load_model(selected_model)
 
-# User input for real-time example (Linear Regression)
-if model_option == 'Linear Regression':
-    st.subheader("Linear Regression - Predicting House Prices")
-    
-    sqft = st.slider('Enter Square Footage', 1000, 3000, 1500)
-    bedrooms = st.slider('Enter Number of Bedrooms', 1, 5, 3)
+# Title and Description
+st.title(f"{selected_model} Overview")
+st.write("""
+    This section explains the selected model in detail, shows a Python code example, and provides additional resources for learning.
+""")
 
-    # Model training
-    X = data[['Square Footage', 'Bedrooms']]
-    y = data['Price']
-    
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    
-    # Prediction
-    prediction = model.predict([[sqft, bedrooms]])
-    st.write(f"Predicted House Price: ${prediction[0]:,.2f}")
+# Display Model Explanation, Code, and Helpful Links
+model.display_info()
 
-    # Expandable window for additional resources
-    with st.expander('Best Market Resources for Linear Regression'):
-        st.write("""
-            - [Machine Learning Mastery - Linear Regression](https://machinelearningmastery.com/linear-regression-in-python/)
-            - [Scikit-learn Documentation - Linear Regression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html)
-            - [Coursera: Machine Learning by Andrew Ng](https://www.coursera.org/learn/machine-learning)
-        """)
-
-# Add other models (Random Forest, SVM, KNN) similarly with sliders for input
