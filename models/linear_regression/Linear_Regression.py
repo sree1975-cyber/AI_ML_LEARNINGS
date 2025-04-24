@@ -1,3 +1,4 @@
+# models/linear_regression/linear_regression.py
 import streamlit as st
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -6,7 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from utils import generate_dataset, plot_regression_line
 
-# Function to display the Linear Regression model explanation and overview
 def display_info():
     with st.expander("5.1 Overview of Linear Regression"):
         st.write("""
@@ -83,7 +83,6 @@ st.pyplot(fig)
         - [Machine Learning Mastery - Linear Regression](https://machinelearningmastery.com/linear-regression-for-machine-learning/)
         """)
 
-# Function to run the interactive example
 def interactive_example():
     st.subheader("Interactive Linear Regression Example")
 
@@ -106,4 +105,3 @@ def interactive_example():
     fig, ax = plt.subplots(figsize=(8, 6))
     plot_regression_line(X_test, y_test, y_pred, ax)
     st.pyplot(fig)
-
