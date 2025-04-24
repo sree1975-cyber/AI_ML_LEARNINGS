@@ -90,25 +90,17 @@ st.pyplot(fig)
         """)
 
 def interactive_example():
-    st.subheader("🏡 House Price Predictor")
+    st.title("🏡 Interactive House Price Predictor")
     
-    # Simulate square footage vs price
-    st.markdown("""
-    **How it works**: 
-    - Each dot represents a house
-    - X-axis = Size (sq.ft)
-    - Y-axis = Price ($)
-    - The red line predicts prices based on size
-    """)
+    # 1. Interactive Controls
+    with st.expander("⚙️ Adjust Market Parameters", expanded=True):
+        col1, col2 = st.columns(2)
+        with col1:
+            base_price = st.slider("Base Price ($)", 100000, 500000, 250000, 10000)
+        with col2:
+            price_per_sqft = st.slider("Price per sq.ft ($)", 100, 500, 200, 10)
     
-    # Interactive controls
-    col1, col2 = st.columns(2)
-    with col1:
-        base_price = st.slider("Base price ($)", 100000, 500000, 250000)
-    with col2:
-        price_per_sqft = st.slider("Price per sq.ft ($)", 100, 500, 200)
-    
-    # Generate realistic housing data
+    # 2. Generate Realistic Data
     np.random.seed(42)
     sizes = np.random.randint(800, 3000, 50)
     noise = np.random.normal(0, 50000, 50)
@@ -117,35 +109,23 @@ def interactive_example():
     X = sizes.reshape(-1, 1)
     y = prices
     
-    # Train model
+    # 3. Train Model
     model = LinearRegression()
     model.fit(X, y)
     predicted_prices = model.predict(X)
     
-    # Plot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.scatter(sizes, prices, color='#3498db', alpha=0.7, label='Actual Homes')
-    ax.plot(sizes, predicted_prices, color='#e74c3c', linewidth=3, label='Predicted Value')
+    # 4. Show Interactive Plot
+    fig = plot_interactive_regression(X, y, predicted_prices)
+    st.plotly_chart(fig, use_container_width=True)
     
-    # Style
-    ax.set_title("House Prices vs Size", fontsize=16, pad=20)
-    ax.set_xlabel("Size (sq.ft)", fontsize=12)
-    ax.set_ylabel("Price ($)", fontsize=12)
-    ax.legend()
-    ax.grid(alpha=0.2)
-    st.pyplot(fig)
-    
-    # Explanation
+    # 5. Dynamic Insights
     st.markdown(f"""
-    ### 📊 **Results Explained**
-    1. **Current Market Trend**: 
-       - Base Price = ${base_price:,}
-       - **+ ${price_per_sqft} per sq.ft**
-    2. **Model Insights**:
-       - For a **1,500 sq.ft home**: Predicted ≈ **${model.predict([[1500]])[0]:,.0f}**
-       - For a **2,500 sq.ft home**: Predicted ≈ **${model.predict([[2500]])[0]:,.0f}**
-    3. **Key Takeaway**: 
-       - Larger homes follow the red trend line
-       - Dots above/below the line are under/over-valued
+    ### 📊 Instant Insights
+    - **Current Market Rate**: ${price_per_sqft}/sq.ft
+    - **1,500 sq.ft Home**: ${model.predict([[1500]])[0]:,.0f}
+    - **2,000 sq.ft Home**: ${model.predict([[2000]])[0]:,.0f}
+    - **2,500 sq.ft Home**: ${model.predict([[2500]])[0]:,.0f}
     """)
+    
+    st.info("💡 Hover over dots to see exact prices! Drag sliders to simulate market changes.")
 
