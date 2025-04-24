@@ -10,8 +10,7 @@ models = {
     "Decision Tree": "models.decision_tree.decision_tree",
     "Random Forest": "models.random_forest.random_forest",
     "Logistic Regression": "models.logistic_regression.logistic_regression",
-    "Linear Regression": "models.linear_regression",
-    #"Linear Regression": "models.linear_regression.linear_regression",
+    "Linear Regression": "models.linear_regression.linear_regression",
     "XGBoost": "models.xgboost.xgboost",
     "K-Means Clustering": "models.kmeans.kmeans",
     "Principal Component Analysis (PCA)": "models.pca.pca"
