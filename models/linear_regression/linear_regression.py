@@ -91,22 +91,24 @@ st.pyplot(fig)
 def interactive_example():
     st.subheader("Interactive Linear Regression Example")
 
-    # Generate a random dataset
-    X, y = generate_dataset()
+    # Generate dataset
+    X, y = generate_dataset()  # Now using the correct regression dataset
 
-    # Split the dataset
+    # Split dataset
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-    # Linear Regression model
+    # Train model
     model = LinearRegression()
     model.fit(X_train, y_train)
-
-    # Predictions and performance metrics
+    
+    # Predictions
     y_pred = model.predict(X_test)
-    st.write(f"Mean Squared Error: {mean_squared_error(y_test, y_pred)}")
-    st.write(f"R^2 Score: {r2_score(y_test, y_pred)}")
-
-    # Plot the regression line
+    
+    # Metrics
+    st.write(f"Mean Squared Error: {mean_squared_error(y_test, y_pred):.2f}")
+    st.write(f"R² Score: {r2_score(y_test, y_pred):.2f}")
+    
+    # Plot - using the correct plotting function
     fig, ax = plt.subplots(figsize=(8, 6))
     plot_regression_line(X_test, y_test, y_pred, ax)
     st.pyplot(fig)
