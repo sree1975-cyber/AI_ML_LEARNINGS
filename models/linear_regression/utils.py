@@ -3,6 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_regression
+import plotly.graph_objects as go
 
 def generate_dataset(n_samples=200, noise=20):
     """Generate regression data"""
@@ -14,15 +15,23 @@ def generate_dataset(n_samples=200, noise=20):
     )
     return X, y
 
-def plot_regression_line(X, y_true, y_pred, ax=None, title="Linear Regression Fit"):
-    """Pure plotting function (no Streamlit calls)"""
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 6))
-    
-    sorted_idx = X.flatten().argsort()
-    ax.scatter(X, y_true, color='blue', label='Actual', alpha=0.7)
-    ax.plot(X[sorted_idx], y_pred[sorted_idx], color='red', label='Predicted')
-    ax.set_title(title)
-    ax.legend()
-    ax.grid(True)
-    return ax
+def plot_regression_line(X, y_true, y_pred):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=X.flatten(), y=y_true, 
+        mode='markers', 
+        marker=dict(color='#636EFA', size=8),
+        name='Actual Data'
+    ))
+    fig.add_trace(go.Scatter(
+        x=X.flatten(), y=y_pred,
+        mode='lines',
+        line=dict(color='#EF553B', width=3),
+        name='Prediction'
+    ))
+    fig.update_layout(
+        template="plotly_white",
+        title="Linear Regression Fit",
+        hovermode="x unified"
+    )
+    return fig
