@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 from utils import generate_dataset, plot_decision_boundary
+import sys
 
 # Function to display the KNN model explanation and overview
 def display_info():
