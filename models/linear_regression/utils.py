@@ -1,3 +1,4 @@
+from sklearn.datasets import make_regression
 import plotly.graph_objects as go
 import numpy as np
 
