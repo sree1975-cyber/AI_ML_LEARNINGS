@@ -112,10 +112,6 @@ def interactive_example():
         st.metric("R² Score", f"{r2_score(y_test, y_pred):.2f}")
     
     # Interactive plot
-    fig, ax = plt.subplots()
-    plot_regression_line(
-        X_test, y_test, y_pred, 
-        ax=ax,
-        title=f"Regression Fit (Noise={noise_level})"
-    )
-    st.pyplot(fig)
+    fig = plot_regression_line(X_test, y_test, y_pred)  # Now returns Plotly figure
+    st.plotly_chart(fig, use_container_width=True)
+
