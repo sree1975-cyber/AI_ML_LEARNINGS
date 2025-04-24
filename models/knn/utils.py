@@ -2,7 +2,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_classification
-from .utils import generate_dataset  # This imports from utils.py in the same folder
 
 # Function to generate a random classification dataset for KNN
 def generate_dataset():
