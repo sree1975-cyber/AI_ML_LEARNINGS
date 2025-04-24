@@ -22,11 +22,12 @@ def plot_decision_boundary(model, X, y, ax=None):
     Z = Z.reshape(xx.shape)
 
     if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 6))
+        fig, ax = plt.subplots(figsize=(8, 6))  # Create a figure and axis if not passed
 
     # Plot the decision boundary and data points
     ax.contourf(xx, yy, Z, alpha=0.75)
     scatter = ax.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o', s=100)
     ax.set_xticks(())
     ax.set_yticks(())
-    return scatter
+    return scatter  # Return scatter object to be used by Streamlit
+
