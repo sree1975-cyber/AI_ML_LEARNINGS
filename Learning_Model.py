@@ -1,5 +1,6 @@
 import streamlit as st
 import importlib
+import inspect
 
 # Models dictionary for dynamic import
 models = {
@@ -23,19 +24,32 @@ selected_model = st.sidebar.selectbox("Select a Model", list(models.keys()))
 def load_model(model_name):
     try:
         model = importlib.import_module(models[model_name])
+        
+        # Check if the necessary functions exist in the module
+        if not callable(getattr(model, 'display_info', None)):
+            st.warning(f"Warning: The function `display_info` is missing for {model_name}.")
+            return None
+        if not callable(getattr(model, 'interactive_example', None)):
+            st.warning(f"Warning: The function `interactive_example` is missing for {model_name}.")
+            return None
+        
         return model
     except Exception as e:
         st.error(f"Error loading model {model_name}: {e}")
+        return None
 
-# Display model information based on user selection
+# Load the selected model dynamically
 model = load_model(selected_model)
 
-# Title and Description
-st.title(f"{selected_model} Overview")
-st.write("""
-    This section explains the selected model in detail, shows a Python code example, and provides additional resources for learning.
-""")
+if model:
+    # Title and Description
+    st.title(f"{selected_model} Overview")
+    st.write("""
+        This section explains the selected model in detail, shows a Python code example, and provides additional resources for learning.
+    """)
 
-# Display Model Explanation, Code, and Helpful Links
-model.display_info()
+    # Display Model Explanation, Code, and Helpful Links
+    model.display_info()
 
+    # Display the interactive example (if available)
+    model.interactive_example()
