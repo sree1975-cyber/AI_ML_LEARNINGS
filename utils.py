@@ -45,41 +45,64 @@ def plot_decision_boundary(model, X, y, ax=None):
 
 # You already have the KNN-specific code in `utils.py`. Below is the sample structure for adding model-specific functions:
 
+def interactive_example():
+    st.subheader("Interactive KNN Example")
 
-# Function to generate a random dataset for regression
-def generate_dataset():
-    np.random.seed(42)
-    X = np.random.rand(100, 1) * 10  # Random 1D features (e.g., square footage)
-    y = 3 * X + np.random.randn(100, 1) * 2  # Target variable: Linear relation with noise
-    return X, y
+    # Generate a random classification dataset for KNN
+    X, y = generate_dataset(model_type="classification")
 
-# Function to plot the regression line
-def plot_regression_line(X_test, y_test, y_pred, ax=None):
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 6))  # Create figure and axis if not passed
+    # Split the dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-    ax.scatter(X_test, y_test, color='blue', label='True values')
-    ax.plot(X_test, y_pred, color='red', label='Regression line')
-    ax.set_xlabel("Square Footage")
-    ax.set_ylabel("House Price")
-    ax.legend()
-    return ax
+    # User input for number of neighbors
+    k = st.slider("Select the number of neighbors (k):", min_value=1, max_value=10, value=3)
+
+    # KNN model
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train)
+
+    # Predictions and accuracy
+    y_pred = knn.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+
+    st.write(f"Accuracy of the KNN model: {accuracy * 100:.2f}%")
+
+    # Plot decision boundary
+    fig, ax = plt.subplots(figsize=(8, 6))
+    plot_decision_boundary(knn, X, y, ax=ax)
+    st.pyplot(fig)
+
+
 
 # ------------------------------------------
 # Linear Regression Specific Utilities
 # ------------------------------------------
 
 # Function to plot the regression line (specific to Linear Regression)
-def plot_regression_line(X_test, y_test, y_pred, ax=None):
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 6))  # Create figure and axis if not passed
+def interactive_example():
+    st.subheader("Interactive Linear Regression Example")
 
-    ax.scatter(X_test, y_test, color='blue', label='True values')
-    ax.plot(X_test, y_pred, color='red', label='Regression line')
-    ax.set_xlabel("Feature (e.g., Square Footage)")
-    ax.set_ylabel("Target (e.g., House Price)")
-    ax.legend()
-    return ax
+    # Generate a random regression dataset for Linear Regression
+    X, y = generate_dataset(model_type="regression")
+
+    # Split the dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    # Linear Regression Model
+    lin_reg = LinearRegression()
+    lin_reg.fit(X_train, y_train)
+
+    # Predictions and Mean Squared Error (MSE)
+    y_pred = lin_reg.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    
+    st.write(f"Mean Squared Error of the Linear Regression model: {mse:.2f}")
+
+    # Plot the regression line
+    fig, ax = plt.subplots(figsize=(8, 6))
+    plot_regression_line(X_test, y_test, y_pred, ax=ax)
+    st.pyplot(fig)
+
 
 
 # ------------------------------------------
