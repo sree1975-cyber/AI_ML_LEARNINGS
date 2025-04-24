@@ -3,7 +3,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
-from utils import generate_dataset, plot_decision_boundary
+#from utils import generate_dataset, plot_decision_boundary
+from models.knn.utils import generate_dataset, plot_decision_boundary
 
 
 # Function to display the KNN model explanation and overview
