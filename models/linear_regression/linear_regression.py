@@ -5,7 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import numpy as np
-from utils import generate_dataset, plot_regression_line
+#from utils import generate_dataset, plot_regression_line
+from models.linear_regression.utils import generate_dataset, plot_decision_boundary
 
 def display_info():
     with st.expander("5.1 Overview of Linear Regression"):
