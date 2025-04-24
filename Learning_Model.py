@@ -4,16 +4,16 @@ import importlib
 
 # Models dictionary for dynamic import
 models = {
-    "K-Nearest Neighbors (KNN)": "models.knn",
-    "Naive Bayes": "models.naive_bayes",
-    "Support Vector Machine (SVM)": "models.svm",
-    "Decision Tree": "models.decision_tree",
-    "Random Forest": "models.random_forest",
-    "Logistic Regression": "models.logistic_regression",
-    "Linear Regression": "models.linear_regression",
-    "XGBoost": "models.xgboost",
-    "K-Means Clustering": "models.kmeans",
-    "Principal Component Analysis (PCA)": "models.pca"
+    "K-Nearest Neighbors (KNN)": "models.knn.knn",  # Make sure the correct path is specified here
+    "Naive Bayes": "models.naive_bayes.naive_bayes",  # Add correct paths for each model
+    "Support Vector Machine (SVM)": "models.svm.svm",
+    "Decision Tree": "models.decision_tree.decision_tree",
+    "Random Forest": "models.random_forest.random_forest",
+    "Logistic Regression": "models.logistic_regression.logistic_regression",
+    "Linear Regression": "models.linear_regression.linear_regression",
+    "XGBoost": "models.xgboost.xgboost",
+    "K-Means Clustering": "models.kmeans.kmeans",
+    "Principal Component Analysis (PCA)": "models.pca.pca"
 }
 
 # Streamlit Sidebar for Model Selection
@@ -47,11 +47,12 @@ if model:
     st.write("""
         This section explains the selected model in detail, shows a Python code example, and provides additional resources for learning.
     """)
-    # Call the `display_info()` function from the respective model
-    model.display_info()  
     
-    # Display Model Explanation, Code, and Helpful Links
+    # Call the `display_info()` function from the respective model
     model.display_info()
 
     # Display the interactive example (if available)
     model.interactive_example()
+else:
+    st.warning("No model loaded. Please select a valid model.")
+
