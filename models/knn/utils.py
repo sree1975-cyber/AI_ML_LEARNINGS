@@ -2,13 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_classification
 
-# Function to generate a random classification dataset for KNN
+# Function to generate a random dataset for KNN and other models
 def generate_dataset():
     np.random.seed(42)
-    X, y = make_classification(n_samples=200, n_features=2, n_classes=2, random_state=42)
+    X, y = make_classification(
+        n_samples=200,         # Number of samples
+        n_features=2,          # Number of features
+        n_classes=2,           # Number of classes
+        n_informative=2,       # Number of informative features
+        n_redundant=0,         # No redundant features
+        random_state=42
+    )
     return X, y
 
-# Function to plot decision boundary for KNN
+# Function to plot decision boundary for KNN (or other classifiers)
 def plot_decision_boundary(model, X, y, ax=None):
     h = .02  # Step size in the mesh
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
@@ -29,4 +36,4 @@ def plot_decision_boundary(model, X, y, ax=None):
     scatter = ax.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o', s=100)
     ax.set_xticks(())
     ax.set_yticks(())
-    return scatter  # Return scatter object to be used by Streamlit
+    return scatter
