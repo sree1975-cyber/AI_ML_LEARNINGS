@@ -36,7 +36,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
-from utils import generate_dataset, plot_regression_line
+# from utils import generate_dataset, plot_regression_line
+from models.linear_regression.utils import generate_dataset, plot_decision_boundary
 
 # Generate a simple dataset for regression
 X, y = generate_dataset()
