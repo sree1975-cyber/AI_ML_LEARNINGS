@@ -1,13 +1,12 @@
+# models/knn/knn.py
 import streamlit as st
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
-from utils import generate_dataset, plot_decision_boundary
+from .utils import generate_dataset, plot_decision_boundary
 
-# Function to display the KNN model explanation and overview
 def display_info():
-    # Overview of KNN
     with st.expander("5.1 Overview of K-Nearest Neighbors (KNN)"):
         st.write("""
         **K-Nearest Neighbors (KNN)** is a simple, instance-based learning algorithm that makes predictions based on the closest data points in the feature space.
@@ -19,7 +18,6 @@ def display_info():
         KNN is widely used for **classification problems**, especially in scenarios where the decision boundaries are not easily separable.
         """)
 
-    # Real-time Use Case (Image Recognition)
     with st.expander("5.2 Real-Time Use Case: Image Recognition"):
         st.write("""
         **Image Recognition** is one of the popular use cases for KNN. KNN can be applied to classify images based on pixel values or high-dimensional feature vectors.
@@ -29,7 +27,6 @@ def display_info():
         - In the case of **face recognition apps**, KNN compares the pixel patterns of an unknown face image with stored face images in a database to classify the face.
         """)
 
-    # Code Example for KNN Model
     with st.expander("5.3 Code Example (K-Nearest.py)"):
         st.code("""
 # K-Nearest Neighbors Classification
@@ -67,7 +64,6 @@ plt.title(f"Decision Boundary for K={k}")
 plt.show()
         """, language="python")
 
-    # Model Results & Performance
     with st.expander("5.4 Model Results & Performance"):
         st.write("""
         After training the KNN model, you can assess its performance using accuracy, precision, recall, and other metrics. KNN's accuracy highly depends on the choice of **K** (number of neighbors) and the dataset.
@@ -80,7 +76,6 @@ plt.show()
         It's important to note that KNN can sometimes suffer from high computational costs, especially when the dataset is large.
         """)
 
-    # Best Practices & Resources
     with st.expander("5.5 Best Practices & Resources"):
         st.write("""
         - **Choosing K**: A smaller K value may lead to overfitting, while a larger K value may smooth over details. Use cross-validation to select the optimal K.
@@ -92,7 +87,6 @@ plt.show()
         - [Scikit-learn Documentation - KNN](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html)
         """)
 
-# Function to run the interactive example
 def interactive_example():
     st.subheader("Interactive KNN Example")
 
@@ -103,42 +97,21 @@ def interactive_example():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
     # User input for number of neighbors
-    k = st.slider("Select the number of neighbors (k):", min_value=1, max_value=10, value=3)
+    k = st.slider("Select the number of neighbors (k):", min_value=1, max_value=15, value=3, step=1)
 
-    # KNN model
+    # Train the KNN model
     knn = KNeighborsClassifier(n_neighbors=k)
     knn.fit(X_train, y_train)
 
-    # Predictions and accuracy
+    # Make predictions and calculate accuracy
     y_pred = knn.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
 
-    st.write(f"Accuracy of the KNN model: {accuracy * 100:.2f}%")
+    # Display accuracy
+    st.write(f"Accuracy: {accuracy * 100:.2f}%")
 
     # Plot decision boundary
     fig, ax = plt.subplots(figsize=(8, 6))
     plot_decision_boundary(knn, X, y, ax=ax)
+    plt.title(f"Decision Boundary for K={k}")
     st.pyplot(fig)
-
-    # Explanation of the plot
-    st.write("""
-    **Plot Explanation:**
-    
-    - **Decision Boundary**: The line (or boundary) drawn on the plot separates different classes. It represents the points where the model makes different predictions based on the input features.
-    - **Mesh Grid**: The background grid shows the feature space with colors corresponding to predicted class labels. Each cell in the grid is assigned a class based on the KNN algorithm's prediction for that region.
-    - **Data Points**: The dots represent the actual data points from the dataset. The color of each dot corresponds to its true class label.
-    - **Impact of K**: The number of neighbors (`K`) determines how smooth or jagged the decision boundary is. With a smaller `K`, the boundary is more jagged and sensitive to outliers. A larger `K` results in a smoother boundary, as the model considers more data points to make predictions.
-    
-    You can use the slider to adjust `K` and observe how the decision boundary changes in real-time!
-    """)
-
-# Main function to run the app
-def main():
-    # Display model info
-    display_info()
-
-    # Run the interactive example
-    interactive_example()
-
-if __name__ == "__main__":
-    main()
