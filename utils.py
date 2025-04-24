@@ -45,10 +45,25 @@ def plot_decision_boundary(model, X, y, ax=None):
 
 # You already have the KNN-specific code in `utils.py`. Below is the sample structure for adding model-specific functions:
 
-def knn_plot_decision_boundary(model, X, y, ax=None):
-    # Function to plot the decision boundary for KNN model
-    return plot_decision_boundary(model, X, y, ax)
 
+# Function to generate a random dataset for regression
+def generate_dataset():
+    np.random.seed(42)
+    X = np.random.rand(100, 1) * 10  # Random 1D features (e.g., square footage)
+    y = 3 * X + np.random.randn(100, 1) * 2  # Target variable: Linear relation with noise
+    return X, y
+
+# Function to plot the regression line
+def plot_regression_line(X_test, y_test, y_pred, ax=None):
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(8, 6))  # Create figure and axis if not passed
+
+    ax.scatter(X_test, y_test, color='blue', label='True values')
+    ax.plot(X_test, y_pred, color='red', label='Regression line')
+    ax.set_xlabel("Square Footage")
+    ax.set_ylabel("House Price")
+    ax.legend()
+    return ax
 
 # ------------------------------------------
 # Linear Regression Specific Utilities
