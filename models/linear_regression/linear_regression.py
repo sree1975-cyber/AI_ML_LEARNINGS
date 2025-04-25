@@ -88,34 +88,40 @@ st.pyplot(fig)
         - [Machine Learning Mastery - Linear Regression](https://machinelearningmastery.com/linear-regression-for-machine-learning/)
         """)
 
+# models/linear_regression/linear_regression.py
+import streamlit as st
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+from models.linear_regression.utils import generate_dataset, plot_interactive_regression  # CORRECTED IMPORT
+
 def interactive_example():
-    st.title("🏡 Interactive House Price Predictor")
+    st.title("🏠 Interactive House Price Predictor")
     
-    # 1. Interactive Controls
-    with st.expander("⚙️ Adjust Market Parameters", expanded=True):
-        col1, col2 = st.columns(2)
-        with col1:
-            base_price = st.slider("Base Price ($)", 100000, 500000, 250000, 10000)
-        with col2:
-            price_per_sqft = st.slider("Price per sq.ft ($)", 100, 500, 200, 10)
+    # 1. User Controls
+    with st.sidebar:
+        st.header("Market Parameters")
+        base_price = st.slider("Base Price ($)", 100000, 500000, 250000)
+        price_per_sqft = st.slider("Price per sq.ft ($)", 100, 500, 200)
+        noise_level = st.slider("Market Volatility", 10, 50, 20)
     
-    # 2. Generate Realistic Data
-    np.random.seed(42)
-    sizes = np.random.randint(800, 3000, 50)
-    noise = np.random.normal(0, 50000, 50)
-    prices = base_price + (sizes * price_per_sqft) + noise
-    
-    X = sizes.reshape(-1, 1)
-    y = prices
+    # 2. Generate Data
+    X, y = generate_dataset(noise=noise_level)
+    prices = base_price + (X.flatten() * price_per_sqft) + np.random.normal(0, noise_level*1000, len(X))
     
     # 3. Train Model
     model = LinearRegression()
-    model.fit(X, y)
-    predicted_prices = model.predict(X)
+    model.fit(X, prices)
+    preds = model.predict(X)
     
     # 4. Show Interactive Plot
-    fig = plot_interactive_regression(X, y, predicted_prices)
+    fig = plot_interactive_regression(X, prices, preds)
     st.plotly_chart(fig, use_container_width=True)
+    
+    # 5. Key Metrics
+    st.metric("Predicted Price for 1500 sq.ft", f"${model.predict([[1500]])[0]:,.0f}")
+    st.metric("Price per sq.ft", f"${model.coef_[0]:.2f}")
     
     # 5. Dynamic Insights
     st.markdown(f"""
