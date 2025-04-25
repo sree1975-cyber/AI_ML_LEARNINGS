@@ -1,5 +1,6 @@
 # models/linear_regression/linear_regression.py
 import streamlit as st
+st.set_page_config(layout="wide")
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
