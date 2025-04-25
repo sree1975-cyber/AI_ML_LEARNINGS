@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_regression
+import plotly.graph_objects as go
 
 def generate_dataset(n_samples=200, noise=20):
     """Generate regression data"""
@@ -13,15 +14,38 @@ def generate_dataset(n_samples=200, noise=20):
     )
     return X, y
 
-def plot_regression_line(X, y_true, y_pred, ax=None, title="Linear Regression Fit"):
-    """Pure plotting function (no Streamlit calls)"""
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(8, 6))
+def plot_interactive_regression(X, y_true, y_pred, x_label="Size (sq.ft)", y_label="Price ($)"):
+    """Creates interactive plot with hover data"""
+    fig = go.Figure()
     
-    sorted_idx = X.flatten().argsort()
-    ax.scatter(X, y_true, color='blue', label='Actual', alpha=0.7)
-    ax.plot(X[sorted_idx], y_pred[sorted_idx], color='red', label='Predicted')
-    ax.set_title(title)
-    ax.legend()
-    ax.grid(True)
-    return ax
+    # Add actual prices (with hover info)
+    fig.add_trace(go.Scatter(
+        x=X.flatten(),
+        y=y_true,
+        mode='markers',
+        name='Actual Homes',
+        marker=dict(color='#3498db', size=10),
+        hovertemplate="<b>%{x} sq.ft</b><br>Price: $%{y:,}<extra></extra>"
+    ))
+    
+    # Add prediction line
+    fig.add_trace(go.Scatter(
+        x=X.flatten(),
+        y=y_pred,
+        mode='lines',
+        name='Predicted Value',
+        line=dict(color='#e74c3c', width=3),
+        hovertemplate="<b>Predicted:</b> $%{y:,}<extra></extra>"
+    ))
+    
+    # Style the plot
+    fig.update_layout(
+        title="🏡 House Price Predictor",
+        xaxis_title=x_label,
+        yaxis_title=y_label,
+        hovermode="x unified",
+        template="plotly_white",
+        height=600
+    )
+    
+    return fig
