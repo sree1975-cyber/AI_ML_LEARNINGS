@@ -88,13 +88,6 @@ st.pyplot(fig)
         - [Machine Learning Mastery - Linear Regression](https://machinelearningmastery.com/linear-regression-for-machine-learning/)
         """)
 
-# models/linear_regression/linear_regression.py
-import streamlit as st
-import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-from models.linear_regression.utils import generate_dataset, plot_interactive_regression  # CORRECTED IMPORT
 
 def interactive_example():
     st.title("🏠 Interactive House Price Predictor")
