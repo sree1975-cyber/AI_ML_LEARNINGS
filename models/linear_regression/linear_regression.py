@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import numpy as np
-from models.linear_regression.utils import generate_dataset, plot_interactive_regression  # CORRECTED IMPORT
+from models.linear_regression.utils import generate_dataset, plot_regression_line
 
 
 X, y = generate_dataset()
@@ -90,40 +90,21 @@ st.pyplot(fig)
 
 
 def interactive_example():
-    st.title("🏠 Interactive House Price Predictor")
+    st.header("Linear Regression Demo")
     
-    # 1. User Controls
-    with st.sidebar:
-        st.header("Market Parameters")
-        base_price = st.slider("Base Price ($)", 100000, 500000, 250000)
-        price_per_sqft = st.slider("Price per sq.ft ($)", 100, 500, 200)
-        noise_level = st.slider("Market Volatility", 10, 50, 20)
+    # Generate data
+    X, y = generate_dataset()
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
     
-    # 2. Generate Data
-    X, y = generate_dataset(noise=noise_level)
-    prices = base_price + (X.flatten() * price_per_sqft) + np.random.normal(0, noise_level*1000, len(X))
-    
-    # 3. Train Model
+    # Train model
     model = LinearRegression()
-    model.fit(X, prices)
-    preds = model.predict(X)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
     
-    # 4. Show Interactive Plot
-    fig = plot_interactive_regression(X, prices, preds)
-    st.plotly_chart(fig, use_container_width=True)
+    # Show plot
+    fig = plot_regression_line(X_test, y_test, y_pred)
+    st.plotly_chart(fig)
     
-    # 5. Key Metrics
-    st.metric("Predicted Price for 1500 sq.ft", f"${model.predict([[1500]])[0]:,.0f}")
-    st.metric("Price per sq.ft", f"${model.coef_[0]:.2f}")
-    
-    # 5. Dynamic Insights
-    st.markdown(f"""
-    ### 📊 Instant Insights
-    - **Current Market Rate**: ${price_per_sqft}/sq.ft
-    - **1,500 sq.ft Home**: ${model.predict([[1500]])[0]:,.0f}
-    - **2,000 sq.ft Home**: ${model.predict([[2000]])[0]:,.0f}
-    - **2,500 sq.ft Home**: ${model.predict([[2500]])[0]:,.0f}
-    """)
-    
-    st.info("💡 Hover over dots to see exact prices! Drag sliders to simulate market changes.")
-
+    # Metrics
+    st.write(f"MSE: {mean_squared_error(y_test, y_pred):.2f}")
+    st.write(f"R²: {r2_score(y_test, y_pred):.2f}")
