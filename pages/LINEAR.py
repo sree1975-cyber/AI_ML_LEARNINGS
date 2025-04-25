@@ -1,4 +1,3 @@
-still getting error can you please correct?
 # models/linear_regression/linear_regression.py
 import streamlit as st
 import pandas as pd
