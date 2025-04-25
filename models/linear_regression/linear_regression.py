@@ -7,7 +7,6 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 import plotly.express as px
 
-
 def display_info():
     with st.expander("5.1 Overview of Linear Regression"):
         st.write("""
