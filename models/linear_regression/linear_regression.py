@@ -5,7 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import numpy as np
-from models.linear_regression.utils import generate_dataset, plot_regression_line
+#from models.linear_regression.utils import generate_dataset, plot_regression_line
+from models.linear_regression.utils import generate_dataset, plot_interactive_regression
 
 
 X, y = generate_dataset()
@@ -90,33 +91,41 @@ st.pyplot(fig)
 
 
 def interactive_example():
-    st.subheader("Interactive Linear Regression Demo")
+    st.title("🏡 Interactive House Price Predictor")
     
-    # Add interactive controls
-    n_samples = st.slider("Number of samples", 50, 500, 200)
-    noise_level = st.slider("Noise level", 5, 50, 20)
+    # 1. Interactive Controls
+    with st.expander("⚙️ Adjust Market Parameters", expanded=True):
+        col1, col2 = st.columns(2)
+        with col1:
+            base_price = st.slider("Base Price ($)", 100000, 500000, 250000, 10000)
+        with col2:
+            price_per_sqft = st.slider("Price per sq.ft ($)", 100, 500, 200, 10)
     
-    # Generate data with user parameters
-    X, y = generate_dataset(n_samples=n_samples, noise=noise_level)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+    # 2. Generate Realistic Data
+    np.random.seed(42)
+    sizes = np.random.randint(800, 3000, 50)
+    noise = np.random.normal(0, 50000, 50)
+    prices = base_price + (sizes * price_per_sqft) + noise
     
-    # Train and predict
+    X = sizes.reshape(-1, 1)
+    y = prices
+    
+    # 3. Train Model
     model = LinearRegression()
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
+    model.fit(X, y)
+    predicted_prices = model.predict(X)
     
-    # Show metrics
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric("Mean Squared Error", f"{mean_squared_error(y_test, y_pred):.2f}")
-    with col2:
-        st.metric("R² Score", f"{r2_score(y_test, y_pred):.2f}")
+    # 4. Show Interactive Plot
+    fig = plot_interactive_regression(X, y, predicted_prices)
+    st.plotly_chart(fig, use_container_width=True)
     
-    # Interactive plot
-    fig, ax = plt.subplots()
-    plot_regression_line(
-        X_test, y_test, y_pred, 
-        ax=ax,
-        title=f"Regression Fit (Noise={noise_level})"
-    )
-    st.pyplot(fig)
+    # 5. Dynamic Insights
+    st.markdown(f"""
+    ### 📊 Instant Insights
+    - **Current Market Rate**: ${price_per_sqft}/sq.ft
+    - **1,500 sq.ft Home**: ${model.predict([[1500]])[0]:,.0f}
+    - **2,000 sq.ft Home**: ${model.predict([[2000]])[0]:,.0f}
+    - **2,500 sq.ft Home**: ${model.predict([[2500]])[0]:,.0f}
+    """)
+    
+    st.info("💡 Hover over dots to see exact prices! Drag sliders to simulate market changes.")
