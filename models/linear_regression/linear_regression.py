@@ -5,9 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import numpy as np
-#from utils import generate_dataset, plot_regression_line
-from models.linear_regression.utils import generate_dataset, plot_regression_line
-#from models.linear_regression.utils import generate_dataset, plot_interactive_regression
+from models.linear_regression.utils import generate_dataset, plot_interactive_regression  # CORRECTED IMPORT
 
 
 X, y = generate_dataset()
