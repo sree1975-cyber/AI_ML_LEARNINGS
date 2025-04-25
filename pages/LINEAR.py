@@ -248,3 +248,15 @@ if 'sample_data' in st.session_state:
                     st.write(f"Location Premium: {location} × { {'Urban':1.3, 'Suburban':1.1, 'Rural':0.9}[location] }x")
                     st.write(f"Market Condition: {market} × { {'Hot':1.15, 'Normal':1.0, 'Cool':0.85}[market] }x")
 
+    def main():
+    # First show the info sections
+    display_info()
+    
+    # Then show the interactive components
+    with st.container(border=True):
+        st.subheader("Step 1: Generate Sample Data")
+        if st.button("📊 Load Sample Housing Data", type="primary"):
+            # ... rest of your interactive code ...
+
+if __name__ == "__main__":
+    main()
