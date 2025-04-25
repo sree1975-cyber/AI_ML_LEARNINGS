@@ -90,21 +90,33 @@ st.pyplot(fig)
 
 
 def interactive_example():
-    st.header("Linear Regression Demo")
+    st.subheader("Interactive Linear Regression Demo")
     
-    # Generate data
-    X, y = generate_dataset()
+    # Add interactive controls
+    n_samples = st.slider("Number of samples", 50, 500, 200)
+    noise_level = st.slider("Noise level", 5, 50, 20)
+    
+    # Generate data with user parameters
+    X, y = generate_dataset(n_samples=n_samples, noise=noise_level)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
     
-    # Train model
+    # Train and predict
     model = LinearRegression()
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     
-    # Show plot
-    fig = plot_regression_line(X_test, y_test, y_pred)
-    st.plotly_chart(fig)
+    # Show metrics
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Mean Squared Error", f"{mean_squared_error(y_test, y_pred):.2f}")
+    with col2:
+        st.metric("R² Score", f"{r2_score(y_test, y_pred):.2f}")
     
-    # Metrics
-    st.write(f"MSE: {mean_squared_error(y_test, y_pred):.2f}")
-    st.write(f"R²: {r2_score(y_test, y_pred):.2f}")
+    # Interactive plot
+    fig, ax = plt.subplots()
+    plot_regression_line(
+        X_test, y_test, y_pred, 
+        ax=ax,
+        title=f"Regression Fit (Noise={noise_level})"
+    )
+    st.pyplot(fig)
